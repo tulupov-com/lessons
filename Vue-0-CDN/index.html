@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Vue.js 3 demo</title>
     <link rel="stylesheet" href="theme.css">
 </head>
 <body>
@@ -53,7 +53,7 @@
             <!-- <div v-else-if="notes.length === 0">Заметок пока нет: введите первую</div> -->
             <div v-else class="nolist">Заметок пока нет: введите первую</div>
             <hr/>
-            <div>
+            <div class="nolist">
                 <strong>Общее количество: {{ notes.length }}</strong> | Удвоенное: {{ doubleCount() }} {{ doubleCountedCount }}<!--  | Утроенное: {{ tripleCount() }} -->
             </div>
         </div>
