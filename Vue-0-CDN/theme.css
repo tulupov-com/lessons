@@ -1,20 +1,41 @@
 * {
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
 }
-card.center {
+.card.center {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    padding: 1rem;
+}
+input {
+    width: 100%;
+    border: 1px solid teal;
+    padding: 10px 15px;
+    margin-top: 1rem;
+}
+button {
+    margin: .5rem;
+    align-self: flex-end;
+    padding: 10px 15px;
+    background: none;
+    color: teal;
+    border: 1px solid teal;
+    cursor: pointer;
 }
 .list {
     margin: 0;
-    padding: 0;
+    padding: 0 1rem 1rem 1rem;
     list-style: none;
 }
 .list-item {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: .5rem 0;
+    margin-top: 1rem;
+    padding: .5rem;
+    border: 2px solid teal;
+}
+.nolist {
+    padding: 1rem;
 }
