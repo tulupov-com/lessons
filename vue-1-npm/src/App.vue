@@ -1,13 +1,13 @@
 <template>
     <div class="app">
-        <div>
+        <div style="margin-bottom: .5rem;">
             <button class="btn" v-on:click="addLike">Like</button>
             <button class="btn" @click="addDislike">Dislike</button>
         </div>
         <div>Кол-во лайков: <strong>{{ likes }}</strong></div>
         <div>Кол-во дизлайков: <strong>{{ dislikes }}</strong></div>
-        <form>
-            <h3>Добавление поста:</h3>
+        <form @submit.prevent>
+            <h2>Добавление поста из App.vue:</h2>
             <input 
                 v-bind:value="inTitle"
                 @input="inTitle = $event.target.value" 
@@ -22,27 +22,37 @@
                 type="text" 
                 placeholder="Описание" 
             >
-            <button class="btn" @click="createPost" type="button">Добавить</button>
-            <!-- не забыть type="button" чтобы страница не перерисовывалась -->
+            <button class="btn" @click="createPost">Добавить</button>
+            <!-- не забыть <form @submit.prevent> чтобы страница не перерисовывалась -->
         </form>
         <div class="post" v-for="post in posts" v-bind:key="post.id">
             <div><strong>Название: </strong>{{ post.title }}</div>
             <div><strong>Описание: </strong>{{ post.body }}</div>
         </div>
+        <post-form 
+            @create="createPostNew"
+        />
+        <post-list 
+            :posts="posts" 
+        />
+        <!-- вместо v-bind: можно использовать просто : вместо v-on: можно использовать @: -->
     </div>
 </template>
 
 <script>
+import PostForm from "@/components/PostForm.vue";
+import PostList from "@/components/PostList.vue";
 export default {
+    components: {
+        PostForm, PostList
+    },
     data() {
         return {
             likes: 0,
             dislikes: 0,
             posts: [
-                { id: 1, title: "JavaScript 1", body: "Описание поста 1" },
-                { id: 2, title: "JavaScript 2", body: "Описание поста 2" },
-                { id: 3, title: "JavaScript 3", body: "Описание поста 3" },
-                { id: 4, title: "JavaScript 4", body: "Описание поста 4" }
+                { id: 1, title: "JavaScript 1", body: "Описание поста 1" }
+                // не забывайте, что в массиве не как в объекте нельзя оставлять последнюю запятую
             ],
             inTitle: '',
             inBody: ''
@@ -50,25 +60,39 @@ export default {
     },
     methods: {
         addLike() {
-            this.likes += 1
+            this.likes += 1;
         },
         addDislike() {
-            this.dislikes += 1
+            this.dislikes += 1;
         },
         createPost() {
-            
-            this.inTitle = ''
-            this.inBody = ''
+            const newPost = {
+                id: Date.now(),
+                title: this.inTitle,
+                body: this.inBody
+            };
+            this.posts.push(newPost);
+            this.inTitle = '';
+            this.inBody = '';
         },
         inputBody(event) {
             // console.log(event)
-            this.inBody = event.target.value
+            this.inBody = event.target.value;
+        },
+        createPostNew(post, second, third) {
+            // console.log(post, second, third);
+            const newPost = {
+                id: Date.now(),
+                title: post.outTitle,
+                body: post.outBody
+            };
+            this.posts.push(newPost);
         }
     }
 }
 </script>
 
-<style>
+<style scoped>
 * {
     margin: 0;
     padding: 0;
@@ -76,6 +100,9 @@ export default {
 }
 .app {
     padding: 20px;
+}
+h2 {
+    padding: 1rem 0;
 }
 .post {
     padding: 15px;
