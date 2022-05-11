@@ -1,10 +1,12 @@
 <template>
     <div>
-        <h3>Список постов:</h3>
+        <h3 v-if="posts.length > 0">Список постов:</h3>
+        <h3 v-else>Постов нет: добавьте первый...</h3>
         <post-item 
             v-for="post in posts" 
             :post="post" 
             :key="post.id" 
+            @remove="$emit('remove', post)"
         />
     </div>
 </template>

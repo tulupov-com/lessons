@@ -9,10 +9,10 @@
 
         <my-input 
             v-model="post.outBody"
-            v-model:value="post.outBody"
             placeholder="Описание" 
         />
         <!-- можно просто использовать v-model вместо v-bind + v-on (как выше для title) -->
+        <!-- можно добавить v-model:value="post.outBody" чтобы value тоже менялось -->
         <my-button 
             @click="createPost"
             style="margin-top: 1rem; align-self: flex-end;"

@@ -34,6 +34,7 @@
         />
         <post-list 
             :posts="posts" 
+            @remove="removePost"
         />
         <!-- вместо v-bind: можно использовать просто : вместо v-on: можно использовать @: -->
     </div>
@@ -87,6 +88,10 @@ export default {
                 body: post.outBody
             };
             this.posts.push(newPost);
+        },
+        removePost(post) {
+            // console.log('removePost', post)
+            this.posts = this.posts.filter(p => p.id !== post.id)
         }
     }
 }
