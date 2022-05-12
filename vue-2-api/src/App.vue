@@ -1,11 +1,15 @@
 <template>
     <div class="app">
         <h2>Добавление поста:</h2>
-        <my-button @click="fetchPosts">Получить посты</my-button>
-        <my-button
-            @click="showDialog"
-            style="margin: 15px 0;"
-        >Создать пост</my-button>
+        <div class="app__btns">
+            <my-button @click="fetchPosts">Получить посты</my-button>
+            <my-button
+                @click="showDialog"
+                style="margin: 15px 0;"
+            >Создать пост</my-button>
+            <my-select />
+        </div>
+        
         <my-dialog v-model:show="dialogVisible">
             <post-form 
                 @create="createPost"
@@ -14,7 +18,9 @@
         <post-list 
             :posts="posts" 
             @remove="removePost"
+            v-if="!isPostsLoading"
         />
+        <div v-else>Идёт загрузка...</div>
         <!-- вместо v-bind: можно использовать просто : вместо v-on: можно использовать @: -->
     </div>
 </template>
@@ -24,6 +30,7 @@ import PostForm from "@/components/PostForm.vue";
 import PostList from "@/components/PostList.vue";
 import MyDialog from "@/components/UI/myDialog.vue";
 import MyButton from "@/components/UI/myButton.vue";
+import MySelect from "@/components/UI/mySelect.vue";
 import axios from 'axios';
 
 export default {
@@ -31,15 +38,14 @@ export default {
         PostForm,
         PostList,
         MyDialog,
-        MyButton
+        MyButton,
+        MySelect
     },
     data() {
         return {
-            posts: [
-                { id: 1, title: "JavaScript 1", body: "Описание поста 1" }
-                // не забывайте, что в массиве не как в объекте нельзя оставлять последнюю запятую
-            ],
-            dialogVisible: false
+            posts: [],
+            dialogVisible: false,
+            isPostsLoading: false,
         }
     },
     methods: {
@@ -61,14 +67,23 @@ export default {
             this.dialogVisible = true;
         },
         async fetchPosts() {
+            this.isPostsLoading = true;
             try {
-                const response = await axios.get('https://jsonplaceholder.typicode.com/posts?_limit=10&_page=1');
-                // console.log(response);
-                this.posts = response.data;
+                // setTimeout(async () => {
+                    const response = await axios.get('https://jsonplaceholder.typicode.com/posts?_limit=10&_page=1');
+                    // console.log(response);
+                    this.posts = response.data;
+                    // this.isPostsLoading = false;
+                // }, 1000)
             } catch (error) {
                 alert('Ошибка ', error);
+            } finally {
+                this.isPostsLoading = false;
             }
         }
+    },
+    mounted() {
+        this.fetchPosts();
     }
 }
 </script>
@@ -84,5 +99,9 @@ export default {
 }
 h2 {
     padding: 1rem 0;
+}
+.app__btns {
+    display: flex;
+    justify-content: space-between;
 }
 </style>
