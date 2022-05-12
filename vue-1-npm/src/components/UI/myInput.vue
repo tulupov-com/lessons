@@ -5,6 +5,7 @@
         class="input" 
         type="text"
     >
+    <!-- для v-model можно добавлять модификаторы .trim - убирает пробелы, .number - сразу преобразует в число, .lazy - позволяет отслеживать события onChange вместо Input -->
 </template>
 
 <script>

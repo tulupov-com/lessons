@@ -32,6 +32,7 @@
         <h2>Добавление поста из PostForm.vue:</h2>
         <my-button
             @click="showDialog"
+            style="margin: 15px 0;"
         >Создать пост</my-button>
         <my-dialog v-model:show="dialogVisible">
             <post-form 
