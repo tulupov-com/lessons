@@ -6,8 +6,8 @@
         </div>
         <div>Кол-во лайков: <strong>{{ likes }}</strong></div>
         <div>Кол-во дизлайков: <strong>{{ dislikes }}</strong></div>
+        <h2>Добавление поста из App.vue:</h2>
         <form @submit.prevent>
-            <h2>Добавление поста из App.vue:</h2>
             <input 
                 v-bind:value="inTitle"
                 @input="inTitle = $event.target.value" 
@@ -29,9 +29,15 @@
             <div><strong>Название: </strong>{{ post.title }}</div>
             <div><strong>Описание: </strong>{{ post.body }}</div>
         </div>
-        <post-form 
-            @create="createPostNew"
-        />
+        <h2>Добавление поста из PostForm.vue:</h2>
+        <my-button
+            @click="showDialog"
+        >Создать пост</my-button>
+        <my-dialog v-model:show="dialogVisible">
+            <post-form 
+                @create="createPostNew"
+            />
+        </my-dialog>
         <post-list 
             :posts="posts" 
             @remove="removePost"
@@ -43,10 +49,15 @@
 <script>
 import PostForm from "@/components/PostForm.vue";
 import PostList from "@/components/PostList.vue";
+import MyDialog from "./components/UI/myDialog.vue";
+import MyButton from "./components/UI/myButton.vue";
 export default {
     components: {
-        PostForm, PostList
-    },
+    PostForm,
+    PostList,
+    MyDialog,
+    MyButton
+},
     data() {
         return {
             likes: 0,
@@ -56,7 +67,8 @@ export default {
                 // не забывайте, что в массиве не как в объекте нельзя оставлять последнюю запятую
             ],
             inTitle: '',
-            inBody: ''
+            inBody: '',
+            dialogVisible: false
         }
     },
     methods: {
@@ -88,10 +100,14 @@ export default {
                 body: post.outBody
             };
             this.posts.push(newPost);
+            this.dialogVisible = false;
         },
         removePost(post) {
             // console.log('removePost', post)
             this.posts = this.posts.filter(p => p.id !== post.id)
+        },
+        showDialog() {
+            this.dialogVisible = true
         }
     }
 }

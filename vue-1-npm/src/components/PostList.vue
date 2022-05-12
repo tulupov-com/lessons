@@ -1,7 +1,7 @@
 <template>
-    <div>
-        <h3 v-if="posts.length > 0">Список постов:</h3>
-        <h3 v-else>Постов нет: добавьте первый...</h3>
+    <div v-if="posts.length > 0">
+        <h3>Список постов:</h3>
+        
         <post-item 
             v-for="post in posts" 
             :post="post" 
@@ -9,6 +9,10 @@
             @remove="$emit('remove', post)"
         />
     </div>
+    <div v-else>
+        <h3>Постов нет: добавьте первый...</h3>
+    </div>
+    <!-- v-if удаляет элемент полностью из DOM дерева, если этого не нужно то надо использовать v-show который отвечает за display св-во -->
 </template>
 
 <script>

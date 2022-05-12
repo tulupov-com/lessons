@@ -1,6 +1,5 @@
 <template>
     <form @submit.prevent>
-        <h2>Добавление поста из PostForm.vue:</h2>
         <my-input 
             :value="post.outTitle"
             @input="post.outTitle = $event.target.value"
