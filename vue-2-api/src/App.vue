@@ -5,9 +5,14 @@
             <my-button @click="fetchPosts">Получить посты</my-button>
             <my-button
                 @click="showDialog"
-                style="margin: 15px 0;"
-            >Создать пост</my-button>
-            <my-select />
+            >
+                <!-- style="margin: 15px 0;" -->
+                Создать пост
+            </my-button>
+            <my-select 
+                v-model="selectedSort"
+                :options="sortOptions"
+            />
         </div>
         
         <my-dialog v-model:show="dialogVisible">
@@ -16,10 +21,11 @@
             />
         </my-dialog>
         <post-list 
-            :posts="posts" 
+            :posts="sortedPosts"
             @remove="removePost"
             v-if="!isPostsLoading"
         />
+        <!-- :posts="posts"  в случае watch, иначе в случае computed -->
         <div v-else>Идёт загрузка...</div>
         <!-- вместо v-bind: можно использовать просто : вместо v-on: можно использовать @: -->
     </div>
@@ -46,6 +52,11 @@ export default {
             posts: [],
             dialogVisible: false,
             isPostsLoading: false,
+            selectedSort: '',
+            sortOptions: [
+                { value: 'title', name: 'По названию' },
+                { value: 'body', name: 'По содержимому' },
+            ],
         }
     },
     methods: {
@@ -84,7 +95,21 @@ export default {
     },
     mounted() {
         this.fetchPosts();
+    },
+    computed: {
+        sortedPosts() {
+            return [...this.posts].sort((post1, post2) => post1[this.selectedSort]?.localeCompare(post2[this.selectedSort]))
+        }
     }
+    // watch: {
+    //     selectedSort(newValue) {
+    //         // console.log(newValue)
+    //         this.posts.sort((post1, post2) => {
+    //             // return post1[this.selectedSort]?.localeCompare(post2[this.selectedSort])
+    //             return post1[newValue]?.localeCompare(post2[newValue])
+    //         })
+    //     }
+    // }
 }
 </script>
 
@@ -103,5 +128,6 @@ h2 {
 .app__btns {
     display: flex;
     justify-content: space-between;
+    margin: 15px 0;
 }
 </style>
