@@ -1,6 +1,10 @@
 <template>
     <div class="app">
-        <h2>Добавление поста:</h2>
+        <h2>Страница с постами</h2>
+        <my-input
+            v-model="searchQuery"
+            placeholder="Поиск..."
+        />
         <div class="app__btns">
             <my-button @click="fetchPosts">Получить посты</my-button>
             <my-button
@@ -21,12 +25,23 @@
             />
         </my-dialog>
         <post-list 
-            :posts="sortedPosts"
+            :posts="sortedAndSearchedPosts"
             @remove="removePost"
             v-if="!isPostsLoading"
         />
-        <!-- :posts="posts"  в случае watch, иначе в случае computed -->
+        <!-- :posts="posts"  в случае watch, :posts="sortedPosts" в случае computed -->
         <div v-else>Идёт загрузка...</div>
+        <div class="page__wrapper">
+            <div 
+                v-for="pageNumber in totalPages" 
+                :key="pageNumber"
+                class="page"
+                :class="{
+                    'current__page': page === pageNumber
+                }"
+                @click="changePage(pageNumber)"
+            >{{ pageNumber }}</div>
+        </div>
         <!-- вместо v-bind: можно использовать просто : вместо v-on: можно использовать @: -->
     </div>
 </template>
@@ -38,21 +53,27 @@ import MyDialog from "@/components/UI/myDialog.vue";
 import MyButton from "@/components/UI/myButton.vue";
 import MySelect from "@/components/UI/mySelect.vue";
 import axios from 'axios';
+import MyInput from "./components/UI/myInput.vue";
 
 export default {
     components: {
-        PostForm,
-        PostList,
-        MyDialog,
-        MyButton,
-        MySelect
-    },
+    PostForm,
+    PostList,
+    MyDialog,
+    MyButton,
+    MySelect,
+    MyInput
+},
     data() {
         return {
             posts: [],
             dialogVisible: false,
             isPostsLoading: false,
             selectedSort: '',
+            searchQuery: '',
+            page: 1,
+            limit: 10,
+            totalPages: 0,
             sortOptions: [
                 { value: 'title', name: 'По названию' },
                 { value: 'body', name: 'По содержимому' },
@@ -77,12 +98,23 @@ export default {
         showDialog() {
             this.dialogVisible = true;
         },
+        changePage(pageNumber) {
+            this.page = pageNumber;
+            // this.fetchPosts();
+        },
         async fetchPosts() {
-            this.isPostsLoading = true;
             try {
+                this.isPostsLoading = true;
                 // setTimeout(async () => {
-                    const response = await axios.get('https://jsonplaceholder.typicode.com/posts?_limit=10&_page=1');
+                    // const response = await axios.get('https://jsonplaceholder.typicode.com/posts?_limit=10');
+                    const response = await axios.get('https://jsonplaceholder.typicode.com/posts', {
+                        params: {
+                            _page: this.page,
+                            _limit: this.limit
+                        }
+                    });
                     // console.log(response);
+                    this.totalPages = Math.ceil(response.headers['x-total-count'] / this.limit);
                     this.posts = response.data;
                     // this.isPostsLoading = false;
                 // }, 1000)
@@ -98,10 +130,13 @@ export default {
     },
     computed: {
         sortedPosts() {
-            return [...this.posts].sort((post1, post2) => post1[this.selectedSort]?.localeCompare(post2[this.selectedSort]))
+            return [...this.posts].sort((post1, post2) => post1[this.selectedSort]?.localeCompare(post2[this.selectedSort]));
+        },
+        sortedAndSearchedPosts() {
+            return this.sortedPosts.filter(post => post.title.toLowerCase().includes(this.searchQuery.toLowerCase()));
         }
-    }
-    // watch: {
+    },
+    watch: {
     //     selectedSort(newValue) {
     //         // console.log(newValue)
     //         this.posts.sort((post1, post2) => {
@@ -109,7 +144,10 @@ export default {
     //             return post1[newValue]?.localeCompare(post2[newValue])
     //         })
     //     }
-    // }
+        page() {
+            this.fetchPosts();
+        }
+    }
 }
 </script>
 
@@ -129,5 +167,18 @@ h2 {
     display: flex;
     justify-content: space-between;
     margin: 15px 0;
+}
+.page__wrapper {
+    display: flex;
+    margin-top: 15px;
+}
+.page {
+    border: 1px solid black;
+    padding: 10px;
+    margin: 0 5px;
+    cursor: pointer;
+}
+.current__page {
+    border: 2px solid teal;
 }
 </style>
