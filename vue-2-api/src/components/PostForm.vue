@@ -15,7 +15,9 @@
         <my-button 
             @click="createPost"
             style="margin-top: 1rem; align-self: flex-end;"
-        >Добавить</my-button>
+        >
+            Добавить
+        </my-button>
         <!-- не забыть type="button" чтобы страница не перерисовывалась -->
     </form>
 </template>

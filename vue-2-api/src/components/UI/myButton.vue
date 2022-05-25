@@ -1,5 +1,5 @@
 <template>
-    <button class="btn">
+    <button>
         <slot></slot>
     </button>
 </template>
@@ -11,11 +11,11 @@ export default {
 </script>
 
 <style scoped>
-.btn {
+button {
     margin: .5rem;
     padding: 10px 15px;
     background: none;
-    border: 1px solid darkgreen;
+    border: 1px solid teal;
     cursor: pointer;
 }
 </style>

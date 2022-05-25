@@ -40,30 +40,32 @@
                     'current__page': page === pageNumber
                 }"
                 @click="changePage(pageNumber)"
-            >{{ pageNumber }}</div>
+            >
+            {{ pageNumber }}
+            </div>
         </div>
         <!-- вместо v-bind: можно использовать просто : вместо v-on: можно использовать @: -->
     </div>
 </template>
 
 <script>
+import axios from 'axios';
 import PostForm from "@/components/PostForm.vue";
 import PostList from "@/components/PostList.vue";
 import MyDialog from "@/components/UI/myDialog.vue";
 import MyButton from "@/components/UI/myButton.vue";
 import MySelect from "@/components/UI/mySelect.vue";
-import axios from 'axios';
-import MyInput from "./components/UI/myInput.vue";
+import MyInput from "@/components/UI/myInput.vue";
 
 export default {
     components: {
-    PostForm,
-    PostList,
-    MyDialog,
-    MyButton,
-    MySelect,
-    MyInput
-},
+        PostForm,
+        PostList,
+        MyDialog,
+        MyButton,
+        MySelect,
+        MyInput
+    },
     data() {
         return {
             posts: [],
@@ -92,7 +94,7 @@ export default {
             this.dialogVisible = false;
         },
         removePost(post) {
-            // console.log('removePost', post)
+            // console.log('removePost', post);
             this.posts = this.posts.filter(p => p.id !== post.id);
         },
         showDialog() {
@@ -138,10 +140,10 @@ export default {
     },
     watch: {
     //     selectedSort(newValue) {
-    //         // console.log(newValue)
+    //         // console.log(newValue);
     //         this.posts.sort((post1, post2) => {
-    //             // return post1[this.selectedSort]?.localeCompare(post2[this.selectedSort])
-    //             return post1[newValue]?.localeCompare(post2[newValue])
+    //             // return post1[this.selectedSort]?.localeCompare(post2[this.selectedSort]);
+    //             return post1[newValue]?.localeCompare(post2[newValue]);
     //         })
     //     }
         page() {
@@ -151,7 +153,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 * {
     margin: 0;
     padding: 0;
@@ -179,6 +181,6 @@ h2 {
     cursor: pointer;
 }
 .current__page {
-    border: 2px solid teal;
+    background: teal;
 }
 </style>

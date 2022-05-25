@@ -8,7 +8,9 @@
         <div class="post__btns">
             <my-button
                 @click="$emit('remove', post)"
-            >Удалить</my-button>
+            >
+                Удалить
+            </my-button>
         </div>
     </div>
 </template>
@@ -27,7 +29,7 @@ export default {
 <style scoped>
 .post {
     padding: 15px;
-    border: 2px solid darkgreen;
+    border: 2px solid teal;
     align-self: flex-end;
     margin-top: 15px;
     display: flex;
