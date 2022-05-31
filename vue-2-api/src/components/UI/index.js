@@ -4,5 +4,8 @@ import myDialog from "@/components/UI/myDialog.vue";
 import mySelect from "@/components/UI/mySelect.vue";
 
 export default [
-    myButton, myInput, myDialog, mySelect
+    myButton, 
+    myInput,
+    myDialog, 
+    mySelect
 ]

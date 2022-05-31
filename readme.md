@@ -1,9 +1,42 @@
+Установить node.js
+    npm install -g @vue/cli #установить vue-cli
+    vue create vue-3   #создаёт проект vue-3
+        + Babbel
+        - TypeScript
+        + Progressive Web App (PWA) Support
+        + Router
+        + Vuex
+        - CSS Pre-processors
+        + Linter / Formatter
+        - Unit Testing
+        - E2E Testing
+        ----------------------------------------------------------------
+        + Vue 3.x
+        ----------------------------------------------------------------
+        Use history mode for router? (Requires proper server setup for index fallback in production) y
+        ----------------------------------------------------------------
+        + ESLint with error prevention only
+        ----------------------------------------------------------------
+        + Lint on save
+        ----------------------------------------------------------------
+        + In package.json
+        ----------------------------------------------------------------
+        Save this as a preset for future projects? n
+    npm install vue-axios
+
 Команды GIT
-    git init    - шаг 1 инициализация в текущей папке
-    git add *   - шаг 2 добавляет все файлы
-    git commit -m "Добавлены файлы" - шаг 3 коммит
-    git remote add origin https://github.com/tulupov-com/lessons.git    - шаг 4 добавляет внешний репозиторий
-    git push -u origin main - шаг 5 пушим
+    git init    #шаг 1 инициализация в текущей папке
+    git config --list   #отображает конфигурационные параметры git
+        git config --global init.defaultBranch main
+        git config user.mail "tulupov.andrey@gmail.com"
+        git config user.name "tulupov-com"
+    git branch -m main  #инициализирует ветку main
+    git add *   #шаг 2 добавляет все файлы
+    git commit -m "Добавлены файлы" #шаг 3 коммит
+        git commit -m -a "Добавлены файлы" #шаг 3 коммит с добавлением всех файлов (как при git add *)
+    git remote add origin https://github.com/tulupov-com/lessons.git    #шаг 4 добавляет внешний репозиторий origin
+    git push -u origin main #шаг 5 пушим - передаём изменения на remote репозиторий origin из main
+    git pull origin main #пулим - передаём изменения с сервера на локальный, не забыть перед этим опустошить папку
 
 API свободного поисковика https://habr.com/ru/post/545196/
 

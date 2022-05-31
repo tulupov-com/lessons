@@ -29,7 +29,7 @@
             @remove="removePost"
             v-if="!isPostsLoading"
         />
-        <!-- :posts="posts"  в случае watch, :posts="sortedPosts" в случае computed -->
+        <!-- :posts="posts" в случае watch, :posts="sortedPosts" в случае computed -->
         <div v-else>Идёт загрузка...</div>
         <div class="page__wrapper">
             <div 
@@ -43,6 +43,9 @@
             >
             {{ pageNumber }}
             </div>
+            <page-list
+                :pages="pages"
+            />
         </div>
         <!-- вместо v-bind: можно использовать просто : вместо v-on: можно использовать @: -->
     </div>
@@ -52,19 +55,13 @@
 import axios from 'axios';
 import PostForm from "@/components/PostForm.vue";
 import PostList from "@/components/PostList.vue";
-import MyDialog from "@/components/UI/myDialog.vue";
-import MyButton from "@/components/UI/myButton.vue";
-import MySelect from "@/components/UI/mySelect.vue";
-import MyInput from "@/components/UI/myInput.vue";
+import PageList from "@/components/PageList.vue";
 
 export default {
     components: {
         PostForm,
         PostList,
-        MyDialog,
-        MyButton,
-        MySelect,
-        MyInput
+        PageList
     },
     data() {
         return {
@@ -76,7 +73,9 @@ export default {
             page: 1,
             limit: 10,
             totalPages: 0,
+            pages: [],
             sortOptions: [
+                { value: 'id', name: 'По номеру' },
                 { value: 'title', name: 'По названию' },
                 { value: 'body', name: 'По содержимому' },
             ],
@@ -118,6 +117,12 @@ export default {
                     // console.log(response);
                     this.totalPages = Math.ceil(response.headers['x-total-count'] / this.limit);
                     this.posts = response.data;
+                    // for (number in Range(1, this.totalPages)) {
+                    //     this.pages.attach({
+                    //         number: number
+                    //     })
+                    // }
+                    // this.pages = [...Array(this.totalPages+1).keys()].slice(1)
                     // this.isPostsLoading = false;
                 // }, 1000)
             } catch (error) {
@@ -132,7 +137,10 @@ export default {
     },
     computed: {
         sortedPosts() {
-            return [...this.posts].sort((post1, post2) => post1[this.selectedSort]?.localeCompare(post2[this.selectedSort]));
+            if(this.selectedSort === 'id')
+                return [...this.posts].sort((post1, post2) => post1[this.selectedSort] > post2[this.selectedSort])
+            else
+                return [...this.posts].sort((post1, post2) => post1[this.selectedSort]?.localeCompare(post2[this.selectedSort]))
         },
         sortedAndSearchedPosts() {
             return this.sortedPosts.filter(post => post.title.toLowerCase().includes(this.searchQuery.toLowerCase()));
