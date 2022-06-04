@@ -2,11 +2,11 @@
     <div
         class="page"
         :class="{
-            'current__page': page.number === 1
+            'current__page': current
         }"
-        @click="$emit('changePage', page.number)"
+        @click="$emit('changePage', page)"
     > 
-        {{ page.number }}
+        {{ page }}
     </div>
 </template>
 
@@ -15,6 +15,10 @@ export default {
     props: {
         page: {
             type: Object,
+            required: true,
+        },
+        current: {
+            type: Boolean,
             required: true,
         }
     }

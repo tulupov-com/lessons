@@ -32,7 +32,7 @@
         <!-- :posts="posts" в случае watch, :posts="sortedPosts" в случае computed -->
         <div v-else>Идёт загрузка...</div>
         <div class="page__wrapper">
-            <div 
+            <!-- <div 
                 v-for="pageNumber in totalPages" 
                 :key="pageNumber"
                 class="page"
@@ -41,10 +41,12 @@
                 }"
                 @click="changePage(pageNumber)"
             >
-            {{ pageNumber }}
-            </div>
+                {{ pageNumber }}
+            </div> -->
             <page-list
                 :pages="pages"
+                :current="this.page"
+                @changePage="changePage"
             />
         </div>
         <!-- вместо v-bind: можно использовать просто : вместо v-on: можно использовать @: -->
@@ -77,7 +79,7 @@ export default {
             sortOptions: [
                 { value: 'id', name: 'По номеру' },
                 { value: 'title', name: 'По названию' },
-                { value: 'body', name: 'По содержимому' },
+                { value: 'body', name: 'По описанию' },
             ],
         }
     },
@@ -117,13 +119,14 @@ export default {
                     // console.log(response);
                     this.totalPages = Math.ceil(response.headers['x-total-count'] / this.limit);
                     this.posts = response.data;
-                    // for (number in Range(1, this.totalPages)) {
-                    //     this.pages.attach({
+                    // for (var number = 1; number < this.totalPages+1; number++) {
+                    //     const newPage = {
                     //         number: number
-                    //     })
+                    //     }
+                    //     this.pages.push(newPage);
                     // }
-                    // this.pages = [...Array(this.totalPages+1).keys()].slice(1)
-                    // this.isPostsLoading = false;
+                    this.pages = [...Array(this.totalPages + 1).keys()].slice(1)
+                    this.isPostsLoading = false;
                 // }, 1000)
             } catch (error) {
                 alert('Ошибка ', error);

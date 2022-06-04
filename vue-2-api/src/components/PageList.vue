@@ -3,6 +3,7 @@
         v-for="page in pages"
         :page="page"
         :key="page"
+        :current="page === current"
         @changePage="$emit('changePage', page)"
     />
 </template>
@@ -16,6 +17,10 @@ export default {
         pages: {
             type: Array,
             required: true
+        },
+        current: {
+            type: Object,
+            required: true,
         }
     }
 }
