@@ -27,16 +27,19 @@
 Команды GIT
     git init    #шаг 1 инициализация в текущей папке
     git config --list   #отображает конфигурационные параметры git
-        git config --global init.defaultBranch main
-        git config user.mail "tulupov.andrey@gmail.com"
-        git config user.name "tulupov-com"
+        git config --global init.defaultBranch main #добавляет в конфиг глобальную инициализацию с ветки main
+        git config --global user.mail "tulupov.andrey@gmail.com" #добавляет в конфиг глобальную почту
+        git config --global user.name "tulupov-com" #добавляет в конфиг глобального пользователя
     git branch -m main  #инициализирует ветку main
     git add *   #шаг 2 добавляет все файлы
     git commit -m "Добавлены файлы" #шаг 3 коммит
         git commit -m -a "Добавлены файлы" #шаг 3 коммит с добавлением всех файлов (как при git add *)
+    git remote #выводит информацию о внешних репозиториях
     git remote add origin https://github.com/tulupov-com/lessons.git    #шаг 4 добавляет внешний репозиторий origin
     git push -u origin main #шаг 5 пушим - передаём изменения на remote репозиторий origin из main
-    git pull origin main #пулим - передаём изменения с сервера на локальный, не забыть перед этим опустошить папку
+    git pull #пулим - передаём изменения с сервера на локальный, не забыть перед этим опустошить папку
+        git pull origin main #пулим с явным указанием репозиториев
+            git reset --hard #выполнить перед pull если ошибка "error: Your local changes to the following files would be overwritten by merge: readme.md Please commit your changes or stash them before you merge. Aborting"
 
 API свободного поисковика https://habr.com/ru/post/545196/
 
