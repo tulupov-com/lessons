@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import PostItem from '@/components/PostItem.vue'
+import PostItem from '@/components/PostItem.vue';
 export default {
     components: { PostItem },
     // в дочернем элементе props изменять НЕЛЬЗЯ !!!
