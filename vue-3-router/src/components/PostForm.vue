@@ -1,6 +1,7 @@
 <template>
     <form @submit.prevent>
         <my-input 
+            v-focus
             :value="post.outTitle"
             @input="post.outTitle = $event.target.value"
             placeholder="Название" 
