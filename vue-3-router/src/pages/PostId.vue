@@ -1,6 +1,6 @@
 <template>
-    <div>
-        {{ this.fetchPost($route.params.id) }}
+    <div @="this.fetchPost($route.params.id)">
+        <!-- вместо v-on: можно использовать @ -->
         <h1>Это пост с ID = {{ this.post.id }}, который равен параметру из URL {{ $route.params.id }}</h1>
         <p><b>Заголовок:</b> {{ this.post.title }}</p>
         <p><b>Содержимое:</b> {{ this.post.body }}</p>
@@ -35,11 +35,6 @@ export default {
             } catch (error) {
                 alert('Ошибка ', error);
             }
-        }
-    },
-    computed: {
-        getpost() {
-            this.fetchPost($route.params.id)
         }
     }
 }

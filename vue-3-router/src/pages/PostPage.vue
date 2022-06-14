@@ -148,10 +148,9 @@ export default {
                 this.posts = [...this.posts, ...response.data];
             } catch (error) {
                 alert('Ошибка ', error);
-            } finally {
+            } //finally {
                 // this.isPostsLoading = false;
-                pass;
-            }
+            //}
         }
     },
     mounted() {

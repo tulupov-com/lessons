@@ -7,7 +7,7 @@
         </div>
         <div class="post__btns">
             <my-button
-                @click="$router.push(`/posts/${post.id}`)"
+                @click="$router.push(`/post/${post.id}`)"
             >
                 Открыть
             </my-button>
