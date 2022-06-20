@@ -1,11 +1,23 @@
 <template>
     <div>
+        <h1>{{ $store.state.post.limit }}</h1>
+        <!-- {{ $store.commit('user/setLoading') }} это пример вызова функции из определённого модуля -->
+        <h1>{{ $store.state.likes }}</h1>
+        <h1>{{ $store.getters.doubleLikes }}</h1>
+        <div>
+            {{ $store.state.isAuth ? "Пользователь авторизован" : "Пользователь не авторизован" }}
+            <my-button @click="$store.commit('Auth')">Авторизация</my-button>
+        </div>
+        <div>
+            <my-button @click="$store.commit('incLikes')">Лайк</my-button>
+            <my-button @click="$store.commit('decLikes')">Дизлайк</my-button>
+        </div>
         <h2>Страница с постами</h2>
-        <my-input
+        <!-- <my-input
             v-focus
             v-model="searchQuery"
             placeholder="Поиск..."
-        />
+        /> -->
         <div class="app__btns">
             <my-button @click="fetchPosts">Получить посты</my-button>
             <my-button
@@ -14,10 +26,10 @@
                 <!-- style="margin: 15px 0;" -->
                 Создать пост
             </my-button>
-            <my-select 
+            <!-- <my-select 
                 v-model="selectedSort"
                 :options="sortOptions"
-            />
+            /> -->
         </div>
         
         <my-dialog v-model:show="dialogVisible">
@@ -31,7 +43,7 @@
             v-if="!isPostsLoading"
         />
         <!-- :posts="posts" в случае watch, :posts="sortedPosts" в случае computed -->
-        <div v-else>Идёт загрузка...</div>
+        <!-- <div v-else>Идёт загрузка...</div> -->
         <!--div class="page__wrapper">
             <div 
                 v-for="pageNumber in totalPages" 
@@ -53,7 +65,7 @@
         <!--div ref="observer" class="observer"></div-->
         <!--div v-intersection="{name: 'это Vue.js'}" class="observer"-->
         <!-- можно даже функцию вводить в значение intersection -->
-        <div v-intersection="loadMorePosts" class="observer"></div>
+        <!-- <div v-intersection="loadMorePosts" class="observer"></div> -->
         <!-- вместо v-bind: можно использовать просто : вместо v-on: можно использовать @ -->
     </div>
 </template>
@@ -63,32 +75,31 @@ import axios from 'axios';
 import PostForm from "@/components/PostForm.vue";
 import PostList from "@/components/PostList.vue";
 import PageList from "@/components/PageList.vue";
+import MyButton from '@/components/UI/myButton.vue';
+import { mapState, mapGetters, mapActions, mapMutations } from 'vuex';
 
 export default {
     components: {
-        PostForm,
-        PostList,
-        PageList
-    },
+    PostForm,
+    PostList,
+    PageList,
+    MyButton
+},
     data() {
         return {
-            posts: [],
-            dialogVisible: false,
-            isPostsLoading: false,
-            selectedSort: '',
-            searchQuery: '',
-            page: 1,
-            limit: 10,
-            totalPages: 0,
-            pages: [],
-            sortOptions: [
-                { value: 'id', name: 'По номеру' },
-                { value: 'title', name: 'По названию' },
-                { value: 'body', name: 'По описанию' },
-            ],
+            dialogVisible: false
         }
     },
     methods: {
+        ...mapMutations({
+            setPage: 'post/setPage',
+            setSearchQuery: 'post/setSearchQuery',
+            setSelectedSort: 'post/setSelectedSort'
+        }),
+        ...mapActions({
+            loadMorePosts: 'post/loadMorePosts',
+            fetchPosts: 'post/fetchPosts'
+        }),
         createPost(post) {
             // console.log(post, second, third);
             const newPost = {
@@ -105,83 +116,35 @@ export default {
         },
         showDialog() {
             this.dialogVisible = true;
-        },
-        // changePage(pageNumber) {
-        //     this.page = pageNumber;
-        //     // this.fetchPosts();
-        // },
-        async fetchPosts() {
-            try {
-                this.isPostsLoading = true;
-                // setTimeout(async () => {
-                    // const response = await axios.get('https://jsonplaceholder.typicode.com/posts?_limit=10');
-                    const response = await axios.get('https://jsonplaceholder.typicode.com/posts', {
-                        params: {
-                            _page: this.page,
-                            _limit: this.limit
-                        }
-                    });
-                    // console.log(response);
-                    this.totalPages = Math.ceil(response.headers['x-total-count'] / this.limit);
-                    this.posts = response.data;
-                    // for (var number = 1; number < this.totalPages+1; number++) {
-                    //     const newPage = {
-                    //         number: number
-                    //     }
-                    //     this.pages.push(newPage);
-                    // }
-                    this.pages = [...Array(this.totalPages + 1).keys()].slice(1)
-                // }, 1000)
-            } catch (error) {
-                alert('Ошибка ', error);
-            } finally {
-                this.isPostsLoading = false;
-            }
-        },
-        async loadMorePosts() {
-            try {
-                this.page += 1;
-                // this.isPostsLoading = true;
-                const response = await axios.get('https://jsonplaceholder.typicode.com/posts', {
-                    params: {
-                        _page: this.page,
-                        _limit: this.limit
-                    }
-                });
-                this.totalPages = Math.ceil(response.headers['x-total-count'] / this.limit);
-                this.posts = [...this.posts, ...response.data];
-            } catch (error) {
-                alert('Ошибка ', error);
-            } //finally {
-                // this.isPostsLoading = false;
-            //}
         }
     },
     mounted() {
         this.fetchPosts();
-        // const options = {
-        //     rootMargin: '0px',
-        //     threshold: 1.0
-        // };
-        // const callback = (entries, observer) => {
-        //     if (entries[0].isIntersecting && this.page < this.totalPages) {
-        //         // console.log('Пересечен')
-        //         this.loadMorePosts()
-        //     }
-        // };
-        // const observer = new IntersectionObserver(callback, options);
-        // observer.observe(this.$refs.observer);
     },
     computed: {
-        sortedPosts() {
-            if(this.selectedSort === 'id')
-                return [...this.posts].sort((post1, post2) => post1[this.selectedSort] > post2[this.selectedSort])
-            else
-                return [...this.posts].sort((post1, post2) => post1[this.selectedSort]?.localeCompare(post2[this.selectedSort]))
-        },
-        sortedAndSearchedPosts() {
-            return this.sortedPosts.filter(post => post.title.toLowerCase().includes(this.searchQuery.toLowerCase()));
-        }
+        // sortedPosts() {
+        //     if(this.selectedSort === 'id')
+        //         return [...this.posts].sort((post1, post2) => post1[this.selectedSort] > post2[this.selectedSort])
+        //     else
+        //         return [...this.posts].sort((post1, post2) => post1[this.selectedSort]?.localeCompare(post2[this.selectedSort]))
+        // },
+        // sortedAndSearchedPosts() {
+        //     return this.sortedPosts.filter(post => post.title.toLowerCase().includes(this.searchQuery.toLowerCase()));
+        // }
+        ...mapState({
+            posts: state => state.post.posts,
+            isPostsLoading: state => state.post.isPostsLoading,
+            selectedSort: state => state.post.selectedSort,
+            searchQuery: state => state.post.searchQuery,
+            page: state => state.post.page,
+            limit: state => state.post.limit,
+            totalPages: state => state.post.totalPages,
+            sortOptions: state => state.post.sortOptions
+        }),
+        ...mapGetters({
+            sortedPosts: 'post/sortedPosts',
+            sortedAndSearchedPosts: 'post/sortedAndSearchedPosts'
+        })
     },
     watch: {
     //     selectedSort(newValue) {

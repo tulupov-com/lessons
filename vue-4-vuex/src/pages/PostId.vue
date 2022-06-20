@@ -5,6 +5,10 @@
         <p><b>Заголовок:</b> {{ this.post.title }}</p>
         <p><b>Содержимое:</b> {{ this.post.body }}</p>
     </div>
+    <div>
+        {{ $store.state.isAuth ? "Пользователь авторизован" : "Пользователь не авторизован" }}
+        <my-button @click="$store.commit('Auth')">Авторизация</my-button>
+    </div>
 </template>
 
 <script>
