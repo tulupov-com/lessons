@@ -28,8 +28,8 @@
     git init    #шаг 1 инициализация в текущей папке
     git config --list   #отображает конфигурационные параметры git
         git config --global init.defaultBranch main #добавляет в конфиг глобальную инициализацию с ветки main
-        git config --global user.mail "tulupov.andrey@gmail.com" #добавляет в конфиг глобальную почту
-        git config --global user.name "tulupov-com" #добавляет в конфиг глобального пользователя
+        git config --global user.mail "..." #добавляет в конфиг глобальную почту (как в gitHub)
+        git config --global user.name "..." #добавляет в конфиг глобального пользователя (как сайт, только вместо точки - тире)
     git branch -m main  #инициализирует ветку main
     git add *   #шаг 2 добавляет все файлы
     git commit -m "Добавлены файлы" #шаг 3 коммит
